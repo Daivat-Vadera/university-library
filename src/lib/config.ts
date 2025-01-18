@@ -6,5 +6,6 @@ export const config = {
       urlEndpoint: process.env.NEXT_PUBLIC_IMAGE_KIT_URL_ENDPOINT!,
       privateKey: process.env.IMAGE_KIT_PRIVATE_KEY!,
     },
+    databaseUrl: process.env.DATABASE_URL!,
   },
 };
