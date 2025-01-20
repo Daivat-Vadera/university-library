@@ -8,6 +8,13 @@
       "when": 1737198261596,
       "tag": "0000_awesome_cobalt_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1737269590595,
+      "tag": "0001_modern_beyonder",
+      "breakpoints": true
     }
   ]
 }
