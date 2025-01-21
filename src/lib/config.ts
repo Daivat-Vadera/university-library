@@ -7,9 +7,11 @@ export const config = {
       privateKey: process.env.IMAGE_KIT_PRIVATE_KEY!,
     },
     databaseUrl: process.env.DATABASE_URL!,
-    upstash:{
+    upstash: {
       redisUrl: process.env.UPSTASH_REDIS_URL!,
       redisToken: process.env.UPSTASH_REDIS_TOKEN!,
-    }
+      qstahsUrl: process.env.QSTASH_URL!,
+      qstahsToken: process.env.QSTASH_TOKEN!,
+    },
   },
 };
