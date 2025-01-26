@@ -1,13 +1,13 @@
 import nodemailer from "nodemailer";
 import { config } from "@/lib/config";
 const sendEmail = async ({
-  to,
+  email,
   subject,
-  text,
+  message,
 }: {
-  to: string;
+  email: string;
   subject: string;
-  text: string;
+  message: string;
 }) => {
   try {
     // Configure Mailtrap SMTP Transport
@@ -19,13 +19,14 @@ const sendEmail = async ({
         pass: config.env.mailtrap.password, // Replace with Mailtrap password
       },
     });
+    console.log(email, subject, message);
 
     // Email options
     const mailOptions = {
-      from: 'hello@demomailtrap.com', // Replace with your details
-      to,
-      subject,
-      text,
+      from: "hello@demomailtrap.com", // Replace with your details
+      to: email,
+      subject: subject,
+      html: message,
     };
 
     // Send email
@@ -38,19 +39,21 @@ const sendEmail = async ({
   }
 };
 
-export async function POST(req: { json: () => any; }) {
+export async function POST(req: { json: () => any }) {
   try {
     const body = await req.json();
-    const { to, subject, text } = body;
+    const { email, subject, message } = body;
 
-    if (!to || !subject || !text) {
+    if (!email || !subject || !message) {
       return new Response(
-        JSON.stringify({ error: "Missing required fields: to, subject, text" }),
+        JSON.stringify({
+          error: "Missing required fields: email, subject, message",
+        }),
         { status: 400 }
       );
     }
 
-    const result = await sendEmail({ to, subject, text });
+    const result = await sendEmail({ email, subject, message });
 
     if (result.success) {
       return new Response(
@@ -66,7 +69,7 @@ export async function POST(req: { json: () => any; }) {
         { status: 500 }
       );
     }
-  } catch (error:any) {
+  } catch (error: any) {
     return new Response(
       JSON.stringify({
         error: "Internal server error",
