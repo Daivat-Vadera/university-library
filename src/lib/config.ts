@@ -13,6 +13,8 @@ export const config = {
       redisToken: process.env.UPSTASH_REDIS_TOKEN!,
       qstahsUrl: process.env.QSTASH_URL!,
       qstahsToken: process.env.QSTASH_TOKEN!,
+      qstahsCurrentSiningKey: process.env.QSTASH_CURRENT_SIGNING_KEY!,
+      qstahsNextSiningKey: process.env.QSTASH_NEXT_SIGNING_KEY!,
     },
     mailtrap: {
       host: process.env.MAILTRAP_HOST!,

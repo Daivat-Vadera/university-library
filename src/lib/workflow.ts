@@ -22,13 +22,13 @@ export const sendEmail = async ({
   message: string;
 }) => {
   const emailPayload = {
-    to: email, // Replace with recipient email
+    email: email, // Replace with recipient email
     subject: subject,
-    text: message,
+    message: message,
   };
   const response = await qstashClient.publishJSON({
-    body: emailPayload,
     url: `${config.env.prodApiEndPoint}/api/send-email`, // Replace with your server's API URL
+    body: emailPayload,
   });
   console.log("Scheduled email:", response);
 };
