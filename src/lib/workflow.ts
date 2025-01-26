@@ -27,7 +27,7 @@ export const sendEmail = async ({
     message: message,
   };
   const response = await qstashClient.publishJSON({
-    url: `${config.env.prodApiEndPoint}/api/send-email`, // Replace with your server's API URL
+    url: `${config.env.apiEndPoint}/api/send-email`, // Replace with your server's API URL
     body: emailPayload,
   });
   console.log("Scheduled email:", response);
