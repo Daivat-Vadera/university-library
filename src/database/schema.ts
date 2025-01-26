@@ -1,4 +1,5 @@
 import {
+  date,
   integer,
   pgEnum,
   pgTable,
@@ -30,4 +31,5 @@ export const users = pgTable("users", {
   status: STATUS_ENUM("status").default("PENDING"),
   role: ROLE_ENUM("role").default("USER"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  lastActivityDate: date("last_activity_date").defaultNow(),
 });
