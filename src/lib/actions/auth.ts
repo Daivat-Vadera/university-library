@@ -8,6 +8,8 @@ import { signIn } from "../../../auth";
 import { headers } from "next/headers";
 import ratelimit from "@/lib/ratelimit";
 import { redirect } from "next/navigation";
+import { workflowClient } from "../workflow";
+import { config } from "../config";
 
 export const signInWithCredentials = async (
   prams: Pick<AuthCredentials, "email" | "password">
@@ -70,6 +72,15 @@ export const signUp = async (params: AuthCredentials) => {
       password: hashedPassword,
       universityCard,
     });
+
+    await workflowClient.trigger({
+      url: `${config.env.prodApiEndPoint}/api/workflow`,
+      body: {
+        email,
+        fullName,
+      },
+    });
+
     await signInWithCredentials({ email, password });
     return {
       success: true,
