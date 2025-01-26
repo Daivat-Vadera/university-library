@@ -42,7 +42,7 @@ const sendEmail = async ({
 };
 async function handler(request: NextRequest) {
   // Parse the request body
-  const body = request.body;
+  const body = await request.text();
   console.log(body);
   // console.log();
 
