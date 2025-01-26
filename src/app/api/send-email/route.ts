@@ -28,7 +28,7 @@ const sendEmail = async ({
       from: "hello@demomailtrap.com", // Replace with your details
       to: email,
       subject: subject,
-      html: message,
+      text: message,
     };
 
     // Send email
