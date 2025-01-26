@@ -17,10 +17,10 @@ export const config = {
       qstahsNextSiningKey: process.env.QSTASH_NEXT_SIGNING_KEY!,
     },
     mailtrap: {
-      host: process.env.MAILTRAP_HOST!,
-      port: process.env.MAILTRAP_PORT!,
-      user: process.env.MAILTRAP_USER!,
-      password: process.env.MAILTRAP_PASSWORD!,
+      host: process.env.MAILTRAP_SMTP_HOST!,
+      port: process.env.MAILTRAP_SMTP_PORT!,
+      user: process.env.MAILTRAP_SMTP_USERNAME!,
+      password: process.env.MAILTRAP_SMTP_PASSWORD!,
     }
   },
 };
