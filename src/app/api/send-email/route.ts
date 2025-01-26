@@ -52,7 +52,10 @@ async function handler(request: NextRequest) {
   console.log("Success");
   return NextResponse.json({ name: "John Doe Serverless" });
 }
-export const POST = verifySignatureAppRouter(handler);
+export const POST = verifySignatureAppRouter(handler,{
+  currentSigningKey: config.env.upstash.qstahsCurrentSiningKey,
+  nextSigningKey: config.env.upstash.qstahsNextSiningKey
+});
 // export async function POST(req: { json: () => any }) {
 //   try {
 //     const body = await req.json();
