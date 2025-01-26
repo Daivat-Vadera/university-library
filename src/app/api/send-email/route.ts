@@ -41,20 +41,37 @@ const sendEmail = async ({
   }
 };
 async function handler(request: NextRequest) {
-  // Parse the request body
-  const body = await request.text();
-  console.log(body);
-  // console.log();
+  //destructure body from request
+  const { email, subject, message } = await request.json();
+  console.log(email, subject, message);
+  
+  if (!email || !subject || !message) {
+    return NextResponse.json(
+      { error: "Missing required fields: email, subject, message" },
+      { status: 400 }
+    );
+  }
 
-  // simulate work
-  await new Promise((r) => setTimeout(r, 1000));
+  // send email
+  const result = await sendEmail({ email, subject, message });
 
-  console.log("Success");
-  return NextResponse.json({ name: "John Doe Serverless" });
+  if (!result.success) {
+    return NextResponse.json(
+      { error: "Failed to send email", details: result.error },
+      { status: 500 }
+    );
+  }
+
+  return NextResponse.json(
+    { message: "Email sent successfully", id: result.messageId },
+    {
+      status: 200,
+    }
+  );
 }
-export const POST = verifySignatureAppRouter(handler,{
+export const POST = verifySignatureAppRouter(handler, {
   currentSigningKey: config.env.upstash.qstahsCurrentSiningKey,
-  nextSigningKey: config.env.upstash.qstahsNextSiningKey
+  nextSigningKey: config.env.upstash.qstahsNextSiningKey,
 });
 // export async function POST(req: { json: () => any }) {
 //   try {
