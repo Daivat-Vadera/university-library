@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
 import { config } from "@/lib/config";
+import { verifySignatureAppRouter } from "@upstash/qstash/dist/nextjs";
+import { NextRequest, NextResponse } from "next/server";
 const sendEmail = async ({
   email,
   subject,
@@ -38,44 +40,56 @@ const sendEmail = async ({
     return { success: false, error: error.message };
   }
 };
+async function handler(request: NextRequest) {
+  // Parse the request body
+  const body = request.body;
+  console.log(body);
+  // console.log();
 
-export async function POST(req: { json: () => any }) {
-  try {
-    const body = await req.json();
-    const { email, subject, message } = body;
+  // simulate work
+  await new Promise((r) => setTimeout(r, 1000));
 
-    if (!email || !subject || !message) {
-      return new Response(
-        JSON.stringify({
-          error: "Missing required fields: email, subject, message",
-        }),
-        { status: 400 }
-      );
-    }
-
-    const result = await sendEmail({ email, subject, message });
-
-    if (result.success) {
-      return new Response(
-        JSON.stringify({ message: "Email sent", id: result.messageId }),
-        { status: 200 }
-      );
-    } else {
-      return new Response(
-        JSON.stringify({
-          error: "Failed to send email",
-          details: result.error,
-        }),
-        { status: 500 }
-      );
-    }
-  } catch (error: any) {
-    return new Response(
-      JSON.stringify({
-        error: "Internal server error",
-        details: error.message,
-      }),
-      { status: 500 }
-    );
-  }
+  console.log("Success");
+  return NextResponse.json({ name: "John Doe Serverless" });
 }
+export const POST = verifySignatureAppRouter(handler);
+// export async function POST(req: { json: () => any }) {
+//   try {
+//     const body = await req.json();
+//     const { email, subject, message } = body;
+
+//     if (!email || !subject || !message) {
+//       return new Response(
+//         JSON.stringify({
+//           error: "Missing required fields: email, subject, message",
+//         }),
+//         { status: 400 }
+//       );
+//     }
+
+//     const result = await sendEmail({ email, subject, message });
+
+//     if (result.success) {
+//       return new Response(
+//         JSON.stringify({ message: "Email sent", id: result.messageId }),
+//         { status: 200 }
+//       );
+//     } else {
+//       return new Response(
+//         JSON.stringify({
+//           error: "Failed to send email",
+//           details: result.error,
+//         }),
+//         { status: 500 }
+//       );
+//     }
+//   } catch (error: any) {
+//     return new Response(
+//       JSON.stringify({
+//         error: "Internal server error",
+//         details: error.message,
+//       }),
+//       { status: 500 }
+//     );
+//   }
+// }
