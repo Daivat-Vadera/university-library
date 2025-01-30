@@ -12,3 +12,22 @@ export const signInSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
 });
+
+export const bookSchema = z.object({
+  bookTitle: z.string().min(3).nonempty("Book Title is required"),
+  description: z.string().min(10).nonempty("Description is required"),
+  author: z.string().min(3).nonempty("Author is required"),
+  genre: z.string().min(3).nonempty("Genre is required"),
+  ratting: z.coerce.number().min(1).max(5),
+  totalNoOfBooks: z.coerce
+    .number()
+    .nonnegative("Total number of books is required"),
+  bookImage: z.string().nonempty("Book Image is required"),
+  bookPrimaryColor: z
+    .string()
+    .trim()
+    .regex(/^#(?:[0-9a-fA-F]{3}){1,2}$/)
+    .nonempty("Book Color is required"),
+  bookVideo: z.string().nullable(),
+  bookSummary: z.string().nonempty("Book Summary is required"),
+});
