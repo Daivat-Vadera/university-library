@@ -18,10 +18,13 @@ export const bookSchema = z.object({
   description: z.string().min(10).nonempty("Description is required"),
   author: z.string().min(3).nonempty("Author is required"),
   genre: z.string().min(3).nonempty("Genre is required"),
-  ratting: z.coerce.number().min(1).max(5),
+  rating: z.coerce.number().min(1).max(5), // add this field
   totalNoOfBooks: z.coerce
     .number()
     .nonnegative("Total number of books is required"),
+  availableCopies: z.coerce
+    .number()
+    .nonnegative("Available copies is required"), // add this field
   bookImage: z.string().nonempty("Book Image is required"),
   bookPrimaryColor: z
     .string()
