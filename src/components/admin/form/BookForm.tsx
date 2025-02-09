@@ -22,13 +22,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { FIELD_NAMES, FIELD_TYPES } from "@/constants";
-import ImageUpload from "@/components/ImageUpload";
-import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { bookSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
+import FileUpload from "@/components/FileUpload";
+import ColorPicker from "../ColorPicker";
 
 interface Props extends Partial<Book> {
   type: "create" | "update";
@@ -46,13 +44,16 @@ const BookForm = ({ type, ...book }: Props) => {
       ratting: 1,
       totalNoOfBooks: 1,
       bookImage: "",
-      bookPrimaryColor: "",
+      bookPrimaryColor: "#aabbcc",
       bookVideo: "",
       bookSummary: "",
     },
   });
 
-  const handleSubmit = async (values: z.infer<typeof bookSchema>) => {};
+  const handleSubmit = async (values: z.infer<typeof bookSchema>) => {
+    console.log(values);
+    
+  };
 
   return (
     <Form {...form}>
@@ -185,6 +186,17 @@ const BookForm = ({ type, ...book }: Props) => {
             <FormItem>
               <FormLabel className="capitalize">Book Cover</FormLabel>
               {/* Upload Component */}
+              <FormControl>
+                <FileUpload
+                  variant="light"
+                  placeholder="Upload Book Cover"
+                  type="Image"
+                  accept="image/*"
+                  folder="books/covers"
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -195,7 +207,12 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="capitalize">Book Primary Color</FormLabel>
-              {/* Upload Component */}
+              <FormControl>
+                <ColorPicker
+                  value={field.value}
+                  onPickerChange={field.onChange}
+                />
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}
@@ -206,7 +223,18 @@ const BookForm = ({ type, ...book }: Props) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel className="capitalize">Book Video</FormLabel>
-              {/* Color Picker Component */}
+              <FormControl>
+                <FileUpload
+                  variant="light"
+                  placeholder="Upload Book Video"
+                  type="Video"
+                  accept="video/*"
+                  folder="books/videos"
+                  onFileChange={field.onChange}
+                  value={field.value}
+                />
+              </FormControl>
+
               <FormMessage />
             </FormItem>
           )}
