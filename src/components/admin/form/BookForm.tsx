@@ -244,7 +244,7 @@ const BookForm = ({ type, ...book }: Props) => {
                   placeholder="Upload Book Video"
                   type="Video"
                   accept="video/*"
-                  folder="books/videos"
+                  folder="/books/videos"
                   onFileChange={field.onChange}
                   value={field.value}
                 />
