@@ -3,20 +3,20 @@ import { Button } from "./ui/button";
 import BookCover from "./BookCover";
 
 const BookOverview = ({
-  title,
+  bookTitle,
   author,
   genre,
   rating,
-  total_copies,
-  available_copies,
+  totalNoOfBooks,
+  availableCopies,
   description,
-  color,
-  cover,
+  bookPrimaryColor,
+  bookImage,
 }: Book) => {
   return (
     <section className="book-overview">
       <div className="flex flex-1 flex-col gap-5">
-        <h1>{title}</h1>
+        <h1>{bookTitle}</h1>
         <div className="book-info">
           <p>
             By <span className="font-semibold text-light-200">{author}</span>
@@ -32,10 +32,10 @@ const BookOverview = ({
         </div>
         <div className="book-copies">
           <p>
-            Total Books : <span>{total_copies}</span>
+            Total Books : <span>{totalNoOfBooks}</span>
           </p>
           <p>
-            Available Books : <span>{available_copies}</span>
+            Available Books : <span>{availableCopies}</span>
           </p>
         </div>
         <p className="book-description">{description}</p>
@@ -49,16 +49,16 @@ const BookOverview = ({
           <BookCover
             variant="wide"
             className="z-10"
-            coverColor={color}
-            coverImage={cover}
+            coverColor={bookPrimaryColor}
+            coverImage={bookImage}
           />
         </div>
         <div className="absolute left-48 top-10 rotate-12 opacity-40 max-sm:hidden">
           <BookCover
             variant="wide"
             className="z-10"
-            coverColor={color}
-            coverImage={cover}
+            coverColor={bookPrimaryColor}
+            coverImage={bookImage}
           />
         </div>
       </div>
