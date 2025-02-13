@@ -18,7 +18,7 @@ const page = async () => {
     .orderBy(desc(books.createdAt))) as Book[];
 
   const booksBorrowedEntries = await db
-    .select()
+    .select({ bookId: borrowRecords.bookId, status: borrowRecords.status })
     .from(borrowRecords)
     .where(eq(borrowRecords.userId, userId));
 
