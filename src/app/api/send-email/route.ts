@@ -21,7 +21,6 @@ const sendEmail = async ({
         pass: config.env.mailtrap.password, // Replace with Mailtrap password
       },
     });
-    console.log(email, subject, message);
 
     // Email options
     const mailOptions = {

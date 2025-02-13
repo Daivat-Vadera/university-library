@@ -1,10 +1,35 @@
 import React from "react";
-import { signOut } from "../../../../auth";
+import { auth, signOut } from "../../../../auth";
 import { Button } from "@/components/ui/button";
 import BookList from "@/components/BookList";
-import { sampleBooks } from "@/constants";
+import { redirect } from "next/navigation";
+import { db } from "@/database/drizzle";
+import { books, borrowRecords } from "@/database/schema";
+import { desc, eq, inArray } from "drizzle-orm";
 
-const page = () => {
+const page = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+  if (!userId) return redirect("/");
+  const latestBook = (await db
+    .select()
+    .from(books)
+    .limit(10)
+    .orderBy(desc(books.createdAt))) as Book[];
+
+  const booksBorrowedEntries = await db
+    .select()
+    .from(borrowRecords)
+    .where(eq(borrowRecords.userId, userId));
+
+  const bookIds = booksBorrowedEntries
+    .filter((entry) => entry.status === "BORROWED")
+    .map((entry) => entry.bookId);
+
+  const booksBorrowed = (await db
+    .select()
+    .from(books)
+    .where(inArray(books.id, bookIds))) as Book[];
   return (
     <>
       <form
@@ -16,7 +41,15 @@ const page = () => {
       >
         <Button>Logout</Button>
       </form>
-      <BookList title=" Borrowed Books" books={sampleBooks} />
+      {booksBorrowed.length > 0 && (
+        <BookList title="Borrowed Books" books={booksBorrowed} />
+      )}
+
+      <BookList
+        title="Latest book"
+        books={latestBook}
+        containerClassName="mt-28"
+      />
     </>
   );
 };
