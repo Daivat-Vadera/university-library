@@ -34,3 +34,8 @@ interface BookParams {
   bookVideo: string | null;
   bookSummary: string;
 }
+
+interface BorrowBookParams {
+  userId: string;
+  bookId: string;
+}
