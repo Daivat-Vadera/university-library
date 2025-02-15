@@ -6,15 +6,16 @@ import { redirect } from "next/navigation";
 import { db } from "@/database/drizzle";
 import { books, borrowRecords } from "@/database/schema";
 import { desc, eq, inArray } from "drizzle-orm";
+import BorrowedBookList from "@/components/BorrowedBookList";
 
 const page = async () => {
   const session = await auth();
   const userId = session?.user?.id;
-  if (!userId) return redirect("/");
+  const user = session?.user;
+  if (!userId || !user) return redirect("/");
   const latestBook = (await db
     .select()
     .from(books)
-    .limit(10)
     .orderBy(desc(books.createdAt))) as Book[];
 
   const booksBorrowedEntries = await db
@@ -32,17 +33,20 @@ const page = async () => {
     .where(inArray(books.id, bookIds))) as Book[];
   return (
     <>
-      <form
-        className="mb-10"
-        action={async () => {
-          "use server";
-          await signOut();
-        }}
-      >
-        <Button>Logout</Button>
-      </form>
+      <div className="flex flex-row items-center justify-between mb-6">
+        <div className="text-white text-4xl font-ibm-plex-sans">Hey, {user.name}</div>
+        <form
+          className="mb-10"
+          action={async () => {
+            "use server";
+            await signOut();
+          }}
+        >
+          <Button>Logout</Button>
+        </form>
+      </div>
       {booksBorrowed.length > 0 && (
-        <BookList title="Borrowed Books" books={booksBorrowed} />
+        <BorrowedBookList title="Borrowed Books" books={booksBorrowed} />
       )}
 
       <BookList

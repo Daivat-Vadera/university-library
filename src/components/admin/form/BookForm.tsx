@@ -27,8 +27,9 @@ import { bookSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/FileUpload";
 import ColorPicker from "../ColorPicker";
-import { createBook } from "@/lib/admin/actions/book";
+import { createBook, updateBook } from "@/lib/admin/actions/book";
 import { toast } from "@/hooks/use-toast";
+import { Switch } from "@/components/ui/switch";
 
 interface Props extends Partial<Book> {
   type: "create" | "update";
@@ -38,35 +39,56 @@ const BookForm = ({ type, ...book }: Props) => {
   const router = useRouter();
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
-    defaultValues: {
-      bookTitle: "",
-      description: "",
-      author: "",
-      genre: "",
-      rating: 1, // add this field
-      totalNoOfBooks: 1,
-      availableCopies: 1, // add this field
-      bookImage: "",
-      bookPrimaryColor: "#aabbcc",
-      bookVideo: "",
-      bookSummary: "",
-    },
+    defaultValues:
+      type === "update"
+        ? book
+        : {
+            bookTitle: "",
+            description: "",
+            author: "",
+            genre: "",
+            rating: 1, // add this field
+            totalNoOfBooks: 1,
+            availableCopies: 1, // add this field
+            bookImage: "",
+            bookPrimaryColor: "#aabbcc",
+            bookVideo: "",
+            bookSummary: "",
+            hideBook: false,
+          },
   });
 
   const handleSubmit = async (values: z.infer<typeof bookSchema>) => {
-    const result = await createBook(values);
-    if (result.success) {
-      toast({
-        title: "Success",
-        description: "Book created successfully",
-      });
-      router.push(`/admin/books/${result.data.id}`);
+    if (type === "update") {
+      const result = await updateBook(values, book.id);
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Book Updated successfully",
+        });
+        router.push(`/admin/books/${result.data.id}`);
+      } else {
+        toast({
+          title: "Error",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
     } else {
-      toast({
-        title: "Error",
-        description: result.message,
-        variant: "destructive",
-      });
+      const result = await createBook(values);
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Book created successfully",
+        });
+        router.push(`/admin/books/${result.data.id}`);
+      } else {
+        toast({
+          title: "Error",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -267,6 +289,25 @@ const BookForm = ({ type, ...book }: Props) => {
                   className="book-form_input resize-none"
                   {...field}
                   rows={10}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"hideBook"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="capitalize">
+                Hide Book From Website
+              </FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="ml-3"
                 />
               </FormControl>
               <FormMessage />

@@ -1,4 +1,5 @@
 import {
+  boolean,
   date,
   integer,
   pgEnum,
@@ -49,6 +50,7 @@ export const books = pgTable("books", {
   bookVideo: text("video_url").notNull(),
   bookSummary: text("book_summary").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow(),
+  hideBook: boolean("hide_book").notNull().default(false),
 });
 
 export const borrowRecords = pgTable("borrow_records", {

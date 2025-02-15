@@ -16,7 +16,7 @@ const Header = ({ session }: { session: Session }) => {
         {/* BookWise */}
       </Link>
       <ul className="flex flex-row items-center gap-8">
-        <li>
+        {/* <li>
           <Link
             href="/library"
             className={cn(
@@ -26,7 +26,7 @@ const Header = ({ session }: { session: Session }) => {
           >
             Library
           </Link>
-        </li>
+        </li> */}
         <li>
           <Link href="/my-profile">
             <Avatar>

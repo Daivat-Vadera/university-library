@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import AllBookTable from "@/components/admin/AllBookTable";
 const Page = () => {
   return (
     <section className="w-full rounded-2xl bg-white p-7">
@@ -12,7 +13,7 @@ const Page = () => {
         </Button>
       </div>
       <div className="mt-7 w-full overflow-hidden">
-        <p>Table</p>
+        <AllBookTable />
       </div>
     </section>
   );

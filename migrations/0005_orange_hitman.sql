@@ -1,0 +1,1 @@
+ALTER TABLE "books" ADD COLUMN "hide_book" boolean DEFAULT false NOT NULL;
