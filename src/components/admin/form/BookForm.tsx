@@ -27,7 +27,7 @@ import { bookSchema } from "@/lib/validations";
 import { Textarea } from "@/components/ui/textarea";
 import FileUpload from "@/components/FileUpload";
 import ColorPicker from "../ColorPicker";
-import { createBook } from "@/lib/admin/actions/book";
+import { createBook, updateBook } from "@/lib/admin/actions/book";
 import { toast } from "@/hooks/use-toast";
 
 interface Props extends Partial<Book> {
@@ -35,38 +35,61 @@ interface Props extends Partial<Book> {
 }
 
 const BookForm = ({ type, ...book }: Props) => {
+  console.log(book, "line 30");
+
   const router = useRouter();
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
-    defaultValues: {
-      bookTitle: "",
-      description: "",
-      author: "",
-      genre: "",
-      rating: 1, // add this field
-      totalNoOfBooks: 1,
-      availableCopies: 1, // add this field
-      bookImage: "",
-      bookPrimaryColor: "#aabbcc",
-      bookVideo: "",
-      bookSummary: "",
-    },
+    defaultValues:
+      type === "update"
+        ? book
+        : {
+            bookTitle: "",
+            description: "",
+            author: "",
+            genre: "",
+            rating: 1, // add this field
+            totalNoOfBooks: 1,
+            availableCopies: 1, // add this field
+            bookImage: "",
+            bookPrimaryColor: "#aabbcc",
+            bookVideo: "",
+            bookSummary: "",
+          },
   });
 
   const handleSubmit = async (values: z.infer<typeof bookSchema>) => {
-    const result = await createBook(values);
-    if (result.success) {
-      toast({
-        title: "Success",
-        description: "Book created successfully",
-      });
-      router.push(`/admin/books/${result.data.id}`);
+    if (type === "update") {
+      console.log(values);
+      const result = await updateBook(values, book.id);
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Book Updated successfully",
+        });
+        router.push(`/admin/books/${result.data.id}`);
+      } else {
+        toast({
+          title: "Error",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
     } else {
-      toast({
-        title: "Error",
-        description: result.message,
-        variant: "destructive",
-      });
+      const result = await createBook(values);
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Book created successfully",
+        });
+        router.push(`/admin/books/${result.data.id}`);
+      } else {
+        toast({
+          title: "Error",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
     }
   };
 
