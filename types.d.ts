@@ -11,6 +11,7 @@ interface Book {
   bookImage: string;
   bookVideo: string;
   bookSummary: string;
+  hideBook: boolean;
 }
 
 interface AuthCredentials {

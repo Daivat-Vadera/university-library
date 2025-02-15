@@ -2,6 +2,7 @@ import React from "react";
 import BookCover from "../BookCover";
 import { formatDate } from "@/utils/helper";
 import BookRowAction from "./BookRowAction";
+import Link from "next/link";
 interface Props extends Book {
   createdAt: Date | null;
 }
@@ -15,9 +16,11 @@ const BookTableRow = (props: Props) => {
             coverImage={props.bookImage}
             className="w-9 h-11"
           />
-          <h3 className="ml-2 text-dark-400 text-base font-semibold leading-5 font-ibm-plex-sans ">
-            {props.bookTitle}
-          </h3>
+          <Link href={`/admin/books/${props.id}`}>
+            <h3 className="ml-2 text-dark-400 text-base font-semibold leading-5 font-ibm-plex-sans ">
+              {props.bookTitle}
+            </h3>
+          </Link>
         </div>
       </div>
       <div className="py-4 px-2 w-2/12">

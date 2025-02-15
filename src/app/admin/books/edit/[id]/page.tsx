@@ -13,7 +13,6 @@ const Page = async ({ params }: { params: Promise<{ id: string }> }) => {
     .from(books)
     .where(eq(books.id, id))
     .limit(1);
-    // console.log(bookDetails);
     
   return (
     <>

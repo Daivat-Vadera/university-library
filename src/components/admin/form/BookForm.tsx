@@ -29,14 +29,13 @@ import FileUpload from "@/components/FileUpload";
 import ColorPicker from "../ColorPicker";
 import { createBook, updateBook } from "@/lib/admin/actions/book";
 import { toast } from "@/hooks/use-toast";
+import { Switch } from "@/components/ui/switch";
 
 interface Props extends Partial<Book> {
   type: "create" | "update";
 }
 
 const BookForm = ({ type, ...book }: Props) => {
-  console.log(book, "line 30");
-
   const router = useRouter();
   const form = useForm<z.infer<typeof bookSchema>>({
     resolver: zodResolver(bookSchema),
@@ -55,12 +54,12 @@ const BookForm = ({ type, ...book }: Props) => {
             bookPrimaryColor: "#aabbcc",
             bookVideo: "",
             bookSummary: "",
+            hideBook: false,
           },
   });
 
   const handleSubmit = async (values: z.infer<typeof bookSchema>) => {
     if (type === "update") {
-      console.log(values);
       const result = await updateBook(values, book.id);
       if (result.success) {
         toast({
@@ -290,6 +289,25 @@ const BookForm = ({ type, ...book }: Props) => {
                   className="book-form_input resize-none"
                   {...field}
                   rows={10}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name={"hideBook"}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="capitalize">
+                Hide Book From Website
+              </FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                  className="ml-3"
                 />
               </FormControl>
               <FormMessage />

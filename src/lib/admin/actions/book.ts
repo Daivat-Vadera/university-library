@@ -53,3 +53,37 @@ export const updateBook = async (
     };
   }
 };
+
+export const deleteBook = async (id: string | undefined) => {
+  try {
+    const [book] = await db
+      .select()
+      .from(books)
+      .where(eq(books.id, id!))
+      .limit(1);
+
+    if (book.availableCopies == book.totalNoOfBooks) {
+      const deletedBook = await db
+        .delete(books)
+        .where(eq(books.id, id!))
+        .returning();
+      return {
+        success: true,
+        message: "Book deleted successfully",
+        data: JSON.parse(JSON.stringify(deletedBook[0])),
+      };
+    } else {
+      const borrowedBooks = book.totalNoOfBooks - book.availableCopies;
+      return {
+        success: false,
+        message: `${borrowedBooks} ${borrowedBooks == 1 ? "book" : "books"} are currently borrowed by users. So First return all the borrowed books and then delete the book.For now Hide the book from the list so no one can borrow it.`,
+      };
+    }
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: "An error occurred while Deleting the book",
+    };
+  }
+};

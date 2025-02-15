@@ -4,7 +4,6 @@ import BookTableRow from "./BookTableRow";
 
 const AllBookTable = async () => {
   const allBooks = await db.select().from(books);
-  // console.log(allBooks);
 
   return (
     <section>

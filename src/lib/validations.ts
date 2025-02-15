@@ -33,4 +33,5 @@ export const bookSchema = z.object({
     .nonempty("Book Color is required"),
   bookVideo: z.string().nullable(),
   bookSummary: z.string().nonempty("Book Summary is required"),
+  hideBook: z.boolean().default(false),
 });

@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/database/drizzle";
 import { books, borrowRecords } from "@/database/schema";
 import { desc, eq, inArray } from "drizzle-orm";
+import BorrowedBookList from "@/components/BorrowedBookList";
 
 const page = async () => {
   const session = await auth();
@@ -15,7 +16,6 @@ const page = async () => {
   const latestBook = (await db
     .select()
     .from(books)
-    .limit(10)
     .orderBy(desc(books.createdAt))) as Book[];
 
   const booksBorrowedEntries = await db
@@ -46,7 +46,7 @@ const page = async () => {
         </form>
       </div>
       {booksBorrowed.length > 0 && (
-        <BookList title="Borrowed Books" books={booksBorrowed} />
+        <BorrowedBookList title="Borrowed Books" books={booksBorrowed} />
       )}
 
       <BookList
