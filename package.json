@@ -29,6 +29,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
+    "fast-average-color": "^9.4.0",
     "imagekit": "^6.0.0",
     "imagekitio-next": "^1.0.1",
     "lucide-react": "^0.471.0",
