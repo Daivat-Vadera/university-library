@@ -12,6 +12,7 @@ const page = async () => {
   const session = await auth();
   const userId = session?.user?.id;
   const user = session?.user;
+
   if (!userId || !user) return redirect("/");
   const latestBook = (await db
     .select()
