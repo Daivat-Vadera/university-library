@@ -43,6 +43,13 @@
       "when": 1739614628949,
       "tag": "0005_orange_hitman",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1740620264893,
+      "tag": "0006_stiff_doorman",
+      "breakpoints": true
     }
   ]
 }
