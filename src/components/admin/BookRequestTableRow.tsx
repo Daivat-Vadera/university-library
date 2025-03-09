@@ -1,4 +1,3 @@
-// "use client";
 import { db } from "@/database/drizzle";
 import { books, users } from "@/database/schema";
 import { formatDate } from "@/utils/helper";

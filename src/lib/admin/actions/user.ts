@@ -58,3 +58,27 @@ export const updateUserRole = async (
     };
   }
 };
+
+export const updateUserStatus = async (
+  id: string,
+  status: "APPROVED" | "PENDING" | "REJECTED"
+) => {
+  try {
+    const updatedUser = await db
+      .update(users)
+      .set({ status })
+      .where(eq(users.id, id))
+      .returning();
+    return {
+      success: true,
+      message: "User status updated successfully",
+      data: JSON.parse(JSON.stringify(updatedUser[0])),
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: "An error occurred while Updating the user status",
+    };
+  }
+};
