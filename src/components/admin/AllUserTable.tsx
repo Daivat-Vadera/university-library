@@ -5,7 +5,6 @@ import UserTableRow from "./UserTableRow";
 
 const AllUserTable = async () => {
   const allUsers = await db.select().from(users);
-  console.log(allUsers);
   
   return (
     <section>
