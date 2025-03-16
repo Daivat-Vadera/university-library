@@ -1,0 +1,33 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { getInitials } from "@/lib/utils";
+interface Props {
+  id: string;
+  createdAt: Date | null;
+  fullName: string;
+  email: string;
+  universityId: number;
+  password: string;
+  universityCard: string;
+  status: "APPROVED" | "PENDING" | "REJECTED" | null;
+  role: "USER" | "ADMIN" | null;
+  lastActivityDate: string | null;
+}
+const AccountRequestItem = (user: Props) => {
+  return (
+    <div className='py-[14px] px-8 bg-light-300 rounded-md max-w-fit'>
+      <div className='user flex flex-col items-center justify-center'>
+        <Avatar>
+          <AvatarFallback>{getInitials(user.fullName || "IN")}</AvatarFallback>
+        </Avatar>
+        <div className='text-center'>
+          <p className='font-semibold text-dark-200'>{user.fullName}</p>
+          <p className='text-xs text-light-500 overflow-hidden max-w-[120px] text-ellipsis'>
+            {user.email}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AccountRequestItem;
