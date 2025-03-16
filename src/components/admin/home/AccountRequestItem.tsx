@@ -1,9 +1,5 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getInitials } from "@/lib/utils";
-import { formatDate } from "@/utils/helper";
-import { Link } from "lucide-react";
-import { config } from "@/lib/config";
-import { Avatar, AvatarFallback } from "../ui/avatar";
-
 interface Props {
   id: string;
   createdAt: Date | null;
