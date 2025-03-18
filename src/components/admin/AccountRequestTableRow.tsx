@@ -37,7 +37,7 @@ const AccountRequestTableRow = (user: Props) => {
       </div>
       <div className='py-4 px-2 w-2/12'>
         <h4 className='text-dark-400 text-base font-semibold leading-5 font-ibm-plex-sans'>
-          {formatDate(user.createdAt)}
+          {formatDate(new Date(user.createdAt!))}
         </h4>
       </div>
       <div className='py-4 px-2 w-2/12 font-semibold'>{user.universityId}</div>

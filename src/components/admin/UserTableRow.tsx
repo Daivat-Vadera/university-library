@@ -20,11 +20,11 @@ interface Props {
   role: "USER" | "ADMIN" | null;
   lastActivityDate: string | null;
 }
-const UserTableRow = async (user: Props) => {
+const UserTableRow = async (user: User) => {
   const borrowedBooks = await db
     .select()
     .from(borrowRecords)
-    .where(eq(borrowRecords.userId, user.id));
+    .where(eq(borrowRecords.userId, user.id));    
   return (
     <div className="flex flex-row items-center border-b border-light-300">
       <div className=" py-4 px-2 w-3/12">
@@ -42,7 +42,7 @@ const UserTableRow = async (user: Props) => {
       </div>
       <div className="py-4 px-2 w-2/12">
         <h4 className="text-dark-400 text-base font-semibold leading-5 font-ibm-plex-sans">
-          {formatDate(user.createdAt)}
+          {formatDate(new Date(user.createdAt!))}
         </h4>
       </div>
       <div className="py-4 px-2 w-2/12 font-semibold">

@@ -35,7 +35,6 @@ const BookCoverWithDynamicBG = ({
   useEffect(() => {
     const fac = new FastAverageColor();
     const img = new Image();
-    console.log(coverImage);
 
     img.crossOrigin = "Anonymous"; // Handle CORS if needed
     img.src = "https://ik.imagekit.io/vjhclc3j3/" + coverImage;
@@ -58,7 +57,7 @@ const BookCoverWithDynamicBG = ({
       img.onload = null; // Cleanup
     };
   }, [coverImage]);
-  console.log(color);
+
 
   return (
     <div

@@ -12,6 +12,7 @@ interface Book {
   bookVideo: string;
   bookSummary: string;
   hideBook: boolean;
+  createdAt: Date;
 }
 
 interface AuthCredentials {
@@ -39,4 +40,34 @@ interface BookParams {
 interface BorrowBookParams {
   userId: string;
   bookId: string;
+}
+
+interface QueryParams {
+  query?: string;
+  sort?: string;
+  page?: number;
+  limit?: number;
+}
+
+interface PageProps {
+  searchParams: Promise<{
+    query?: string;
+    sort?: string;
+    page?: number;
+  }>;
+  params: Promise<{ id: string }>;
+}
+
+
+interface User {
+  id: string;
+  createdAt: Date | null;
+  fullName: string;
+  email: string;
+  universityId: number;
+  password: string;
+  universityCard: string;
+  status: "APPROVED" | "PENDING" | "REJECTED" | null;
+  role: "USER" | "ADMIN" | null;
+  lastActivityDate: string | null;
 }
