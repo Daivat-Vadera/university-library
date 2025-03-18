@@ -1,7 +1,9 @@
 "use server";
 import { db } from "@/database/drizzle";
 import { borrowRecords, users } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
+
+const ITEMS_PER_PAGE = 10;
 
 export const deleteUser = async (id: string | undefined) => {
   try {
@@ -79,6 +81,71 @@ export const updateUserStatus = async (
     return {
       success: false,
       message: "An error occurred while Updating the user status",
+    };
+  }
+};
+
+export const getUsers = async ({
+  page = 1,
+  limit = ITEMS_PER_PAGE,
+}: QueryParams) => {
+  try {
+    const allUsers = await db
+      .select()
+      .from(users)
+      .orderBy(desc(users.createdAt))
+      .limit(limit)
+      .offset((page - 1) * limit);
+    const totalItems = await db.select({ count: count(users.id) }).from(users);
+    const totalPages = Math.ceil(totalItems[0].count / ITEMS_PER_PAGE);
+    const hasNextPage = page < totalPages;
+    return {
+      success: true,
+      message: "Users fetched successfully",
+      data: JSON.parse(JSON.stringify(allUsers)),
+      metaData: {
+        totalPages: totalPages,
+        hasNextPage: hasNextPage,
+      },
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: "An error occurred while fetching users",
+    };
+  }
+};
+
+export const unApprovedUsers = async ({ page = 1, limit = ITEMS_PER_PAGE }) => {
+  try {
+    const allUsers = await db
+      .select()
+      .from(users)
+      .where(eq(users.status, "PENDING"))
+      .orderBy(desc(users.createdAt))
+      .limit(limit)
+      .offset((page - 1) * limit);
+    const totalItems = await db
+      .select({ count: count(users.id) })
+      .from(users)
+      .where(eq(users.status, "PENDING"));
+    const totalPages = Math.ceil(totalItems[0].count / ITEMS_PER_PAGE);
+    const hasNextPage = page < totalPages;
+    return {
+      success: true,
+      message: "Users fetched successfully",
+      data: JSON.parse(JSON.stringify(allUsers)),
+      metaData: {
+        totalPages: totalPages,
+        hasNextPage: hasNextPage,
+      },
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: "An error occurred while fetching users",
     };
   }
 };

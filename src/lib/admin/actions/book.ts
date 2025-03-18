@@ -2,7 +2,8 @@
 
 import { db } from "@/database/drizzle";
 import { books } from "@/database/schema";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
+const ITEMS_PER_PAGE = 5;
 
 export const createBook = async (params: BookParams) => {
   try {
@@ -84,6 +85,34 @@ export const deleteBook = async (id: string | undefined) => {
     return {
       success: false,
       message: "An error occurred while Deleting the book",
+    };
+  }
+};
+
+export const getBooks = async ({ page = 1, limit = ITEMS_PER_PAGE }) => {
+  try {
+    const allBooks = await db
+      .select()
+      .from(books)
+      .limit(limit)
+      .offset((page - 1) * limit);
+    const totalItems = await db.select({ count: count(books.id) }).from(books);
+    const totalPages = Math.ceil(totalItems[0].count / ITEMS_PER_PAGE);
+    const hasNextPage = page < totalPages;
+    return {
+      success: true,
+      message: "Books fetched successfully",
+      data: JSON.parse(JSON.stringify(allBooks)),
+      metaData: {
+        totalPages: totalPages,
+        hasNextPage: hasNextPage,
+      },
+    };
+  } catch (error: any) {
+    console.log(error);
+    return {
+      success: false,
+      message: "An error occurred while Getting books list",
     };
   }
 };

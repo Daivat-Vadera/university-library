@@ -3,10 +3,8 @@ import BookCover from "../BookCover";
 import { formatDate } from "@/utils/helper";
 import BookRowAction from "./BookRowAction";
 import Link from "next/link";
-interface Props extends Book {
-  createdAt: Date | null;
-}
-const BookTableRow = (props: Props) => {
+
+const BookTableRow = (props: Book) => {
   return (
     <div className="flex flex-row items-center border-b border-light-300">
       <div className=" py-4 px-2 w-5/12">
@@ -33,7 +31,7 @@ const BookTableRow = (props: Props) => {
           {props.genre}
         </span>
       </div>
-      <div className="py-4 px-2 w-2/12">{formatDate(props.createdAt)}</div>
+      <div className="py-4 px-2 w-2/12">{formatDate(new Date(props.createdAt))}</div>
       <div className=" py-4 px-2 w-1/12">
         <BookRowAction bookId={props.id} />
       </div>
