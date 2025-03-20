@@ -2,7 +2,7 @@
 
 import { db } from "@/database/drizzle";
 import { books } from "@/database/schema";
-import { count, eq } from "drizzle-orm";
+import { asc, count, desc, eq } from "drizzle-orm";
 const ITEMS_PER_PAGE = 5;
 
 export const createBook = async (params: BookParams) => {
@@ -89,11 +89,22 @@ export const deleteBook = async (id: string | undefined) => {
   }
 };
 
-export const getBooks = async ({ page = 1, limit = ITEMS_PER_PAGE }) => {
+export const getBooks = async ({
+  page = 1,
+  limit = ITEMS_PER_PAGE,
+  sort = "default",
+}) => {
   try {
+    const sortOption: Record<string, any> = {
+      default: desc(books.createdAt),
+      ascending: asc(books.bookTitle),
+      descending: desc(books.bookTitle),
+    };
+    const sortingCondition = sortOption[sort];
     const allBooks = await db
       .select()
       .from(books)
+      .orderBy(sortingCondition)
       .limit(limit)
       .offset((page - 1) * limit);
     const totalItems = await db.select({ count: count(books.id) }).from(books);

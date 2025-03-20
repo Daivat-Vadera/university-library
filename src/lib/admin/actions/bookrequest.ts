@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/database/drizzle";
 import { borrowRecords } from "@/database/schema";
-import { count, eq } from "drizzle-orm";
+import { asc, count, desc, eq } from "drizzle-orm";
 const ITEMS_PER_PAGE = 10;
 export const updateBookRequest = async (
   id: string,
@@ -28,17 +28,25 @@ export const updateBookRequest = async (
   }
 };
 
-export const bookRequests = async ({ page = 1, limit = ITEMS_PER_PAGE }) => {
+export const bookRequests = async ({
+  page = 1,
+  limit = ITEMS_PER_PAGE,
+  sort = "default",
+}) => {
   try {
-    const bookRequests = (
-      await db
-        .select()
-        .from(borrowRecords)
-        .limit(limit)
-        .offset((page - 1) * limit)
-    ).sort((a, b) => {
-      return (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0);
-    });
+    
+    const sortOption: Record<string, any> = {
+      default: desc(borrowRecords.createdAt),
+      ascending: desc(borrowRecords.createdAt),
+      descending: asc(borrowRecords.createdAt),
+    };
+    const sortingCondition = sortOption[sort];
+    const bookRequests = await db
+      .select()
+      .from(borrowRecords)
+      .orderBy(sortingCondition)
+      .limit(limit)
+      .offset((page - 1) * limit);
     const totalItems = await db
       .select({ count: count(borrowRecords.id) })
       .from(borrowRecords);

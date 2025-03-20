@@ -6,8 +6,8 @@ import Pagination from "./Pagination";
 import { bookRequests } from "@/lib/admin/actions/bookrequest";
 
 const AllBookRequestTable = async ({ searchParams }: PageProps) => {
-  const { page } = await searchParams;
-  const allBookRequests = await bookRequests({ page });
+  const { page,sort } = await searchParams;
+  const allBookRequests = await bookRequests({ page,sort });
 
   return (
     <>

@@ -6,8 +6,8 @@ import Pagination from "./Pagination";
 import { getUsers } from "@/lib/admin/actions/user";
 
 const AllUserTable = async ({ searchParams }: PageProps) => {
-  const { page } = await searchParams;
-  const allUsers = await getUsers({ page });
+  const { page, sort } = await searchParams;
+  const allUsers = await getUsers({ page, sort });
 
   return (
     <>
