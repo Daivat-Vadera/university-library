@@ -3,8 +3,8 @@ import { getBooks } from "@/lib/admin/actions/book";
 import Pagination from "./Pagination";
 
 const AllBookTable = async ({ searchParams }: PageProps) => {
-  const { page } = await searchParams;
-  const allBooks = await getBooks({ page });
+  const { page, sort } = await searchParams;
+  const allBooks = await getBooks({ page, sort });
 
   return (
     <>

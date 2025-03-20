@@ -1,7 +1,7 @@
 "use server";
 import { db } from "@/database/drizzle";
 import { borrowRecords, users } from "@/database/schema";
-import { count, desc, eq } from "drizzle-orm";
+import { asc, count, desc, eq } from "drizzle-orm";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -87,13 +87,20 @@ export const updateUserStatus = async (
 
 export const getUsers = async ({
   page = 1,
+  sort = "default",
   limit = ITEMS_PER_PAGE,
 }: QueryParams) => {
   try {
+    const sortOption: Record<string, any> = {
+      default: desc(users.createdAt),
+      ascending: asc(users.fullName),
+      descending: desc(users.fullName),
+    };
+    const sortingCondition = sortOption[sort];
     const allUsers = await db
       .select()
       .from(users)
-      .orderBy(desc(users.createdAt))
+      .orderBy(sortingCondition)
       .limit(limit)
       .offset((page - 1) * limit);
     const totalItems = await db.select({ count: count(users.id) }).from(users);
@@ -117,13 +124,23 @@ export const getUsers = async ({
   }
 };
 
-export const unApprovedUsers = async ({ page = 1, limit = ITEMS_PER_PAGE }) => {
+export const unApprovedUsers = async ({
+  page = 1,
+  limit = ITEMS_PER_PAGE,
+  sort = "default",
+}) => {
   try {
+    const sortOption: Record<string, any> = {
+      default: desc(users.createdAt),
+      ascending: desc(users.createdAt),
+      descending: asc(users.createdAt),
+    };
+    const sortingCondition = sortOption[sort];
     const allUsers = await db
       .select()
       .from(users)
       .where(eq(users.status, "PENDING"))
-      .orderBy(desc(users.createdAt))
+      .orderBy(sortingCondition)
       .limit(limit)
       .offset((page - 1) * limit);
     const totalItems = await db

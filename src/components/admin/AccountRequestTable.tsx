@@ -7,8 +7,8 @@ import Pagination from "./Pagination";
 import { unApprovedUsers } from "@/lib/admin/actions/user";
 
 const AccountRequestTable = async ({ searchParams }: PageProps) => {
-  const { page } = await searchParams;
-  const allUnapprovedUsers = await unApprovedUsers({ page });
+  const { page, sort } = await searchParams;
+  const allUnapprovedUsers = await unApprovedUsers({ page, sort });
 
   return (
     <>
