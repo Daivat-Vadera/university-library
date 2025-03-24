@@ -8,7 +8,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { getInitials } from "@/lib/utils";
 import BookRequestRowStatus from "./BookRequestRowStatus";
-import BookReceipt from "./BookReceipt";
+import BookReceiptButton from "./BookReceiptButton";
 
 const BookRequestTableRow = async (props: {
   id: string;
@@ -72,7 +72,7 @@ const BookRequestTableRow = async (props: {
       </div>
       <div className=' py-4 px-2 w-2/12'>
         <span
-          className={`${((props.returnDate != null) && new Date(props.dueDate) > new Date(props.returnDate)) && "text-green-400"} ${((props.returnDate != null) && new Date(props.dueDate) < new Date(props.returnDate)) && "text-red-400"} text-base font-semibold leading-5 font-ibm-plex-sans`}
+          className={`${props.returnDate != null && new Date(props.dueDate) > new Date(props.returnDate) && "text-green-400"} ${props.returnDate != null && new Date(props.dueDate) < new Date(props.returnDate) && "text-red-400"} text-base font-semibold leading-5 font-ibm-plex-sans`}
         >
           {props.returnDate != null
             ? formatDate(new Date(props.returnDate))
@@ -85,7 +85,7 @@ const BookRequestTableRow = async (props: {
         </span>
       </div>
       <div className=' py-4 px-2 w-2/12'>
-        <BookReceipt/>
+        <BookReceiptButton bookDetail={bookDetail} borrowDetail={props} />
       </div>
     </div>
   );
