@@ -6,9 +6,8 @@ import Pagination from "./Pagination";
 import { bookRequests } from "@/lib/admin/actions/bookrequest";
 
 const AllBookRequestTable = async ({ searchParams }: PageProps) => {
-  const { page,sort } = await searchParams;
-  const allBookRequests = await bookRequests({ page,sort });
-
+  const { page, sort } = await searchParams;
+  const allBookRequests = await bookRequests({ page, sort });
   return (
     <>
       <section>
@@ -46,7 +45,9 @@ const AllBookRequestTable = async ({ searchParams }: PageProps) => {
             dueDate: string;
             returnDate: string | null;
           }) => {
-            return <BookRequestTableRow key={request.id} {...request} />;
+            return (
+              <BookRequestTableRow key={request.id} {...request} />
+            );
           }
         )}
       </section>
