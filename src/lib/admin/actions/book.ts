@@ -2,7 +2,7 @@
 
 import { db } from "@/database/drizzle";
 import { books } from "@/database/schema";
-import { asc, count, desc, eq } from "drizzle-orm";
+import { asc, count, desc, eq, ilike, or } from "drizzle-orm";
 const ITEMS_PER_PAGE = 5;
 
 export const createBook = async (params: BookParams) => {
@@ -90,11 +90,24 @@ export const deleteBook = async (id: string | undefined) => {
 };
 
 export const getBooks = async ({
+  query,
   page = 1,
   limit = ITEMS_PER_PAGE,
   sort = "default",
+}: {
+  query?: string;
+  page?: number;
+  limit?: number;
+  sort?: string;
 }) => {
   try {
+    const searchConditions = query
+      ? or(
+          ilike(books.bookTitle, `%${query}%`),
+          ilike(books.genre, `%${query}%`),
+          ilike(books.author, `%${query}%`)
+        )
+      : undefined;
     const sortOption: Record<string, any> = {
       default: desc(books.createdAt),
       ascending: asc(books.bookTitle),
@@ -104,10 +117,14 @@ export const getBooks = async ({
     const allBooks = await db
       .select()
       .from(books)
+      .where(searchConditions)
       .orderBy(sortingCondition)
       .limit(limit)
       .offset((page - 1) * limit);
-    const totalItems = await db.select({ count: count(books.id) }).from(books);
+    const totalItems = await db
+      .select({ count: count(books.id) })
+      .from(books)
+      .where(searchConditions);
     const totalPages = Math.ceil(totalItems[0].count / ITEMS_PER_PAGE);
     const hasNextPage = page < totalPages;
     return {
